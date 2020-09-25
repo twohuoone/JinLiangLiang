@@ -5,22 +5,22 @@ package com.zoro.jinliangliang.pulgin;
  * Created on 2020/8/31
  * description:
  */
-public class Test {
+public class Testaaaaa {
     private String name = "";
     private int age = 10;
 
-    public Test() {
+    public Testaaaaa() {
     }
 
-    private Test(String name) {
+    private Testaaaaa(String name) {
         this.name = name;
     }
 
-    private Test(int age) {
+    private Testaaaaa(int age) {
         this.age = age;
     }
 
-    public Test(String name, int age) {
+    public Testaaaaa(String name, int age) {
         this.name = name;
         this.age = age;
     }

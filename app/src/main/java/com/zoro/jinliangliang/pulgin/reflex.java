@@ -16,9 +16,9 @@ import java.util.ArrayList;
  */
 public class reflex {
     public static void main(String[] args) {
-//        String str = "adc";
-//        Class c1 = str.getClass();
-//        System.out.println(c1);
+        String str = "adc";
+        Class c1 = str.getClass();
+        System.out.println(c1);
 //
 //        try {
 //            Class c2 = Class.forName("java.lang.String");
@@ -99,45 +99,45 @@ public class reflex {
 //            e.printStackTrace();
 //        }
 
-        try {
-            Class r = Class.forName("com.zoro.jinliangliang.pulgin.Test");
-            Class[] p = {String.class};
-            //获取对象
-            Constructor declaredConstructor = r.getDeclaredConstructor(p);
-            declaredConstructor.setAccessible(true);
-            Object dididi = declaredConstructor.newInstance("13");
-            //获取doSomething方法
-            Method doSomething = r.getDeclaredMethod("doSomething", p);
-            doSomething.setAccessible(true);
-            Object argList[] = {"fdsfdfsd"};
-            doSomething.invoke(dididi, argList);
-
-            //获取work方法
-            Method work = r.getDeclaredMethod("work",p);
-            work.setAccessible(true);
-            work.invoke(null,"sfdfsd");
-
-            //获取name属性
-            Field field = r.getDeclaredField("name");
-            field.setAccessible(true);
-            field.get(dididi);
-            field.set(dididi,"sfdfasdfasd");
-            Method getName = r.getDeclaredMethod("getName");
-            getName.setAccessible(true);
-            System.out.println(getName.invoke(dididi));
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            Class r = Class.forName("com.zoro.jinliangliang.pulgin.Test");
+//            Class[] p = {String.class};
+//            //获取对象
+//            Constructor declaredConstructor = r.getDeclaredConstructor(p);
+//            declaredConstructor.setAccessible(true);
+//            Object dididi = declaredConstructor.newInstance("13");
+//            //获取doSomething方法
+//            Method doSomething = r.getDeclaredMethod("doSomething", p);
+//            doSomething.setAccessible(true);
+//            Object argList[] = {"fdsfdfsd"};
+//            doSomething.invoke(dididi, argList);
+//
+//            //获取work方法
+//            Method work = r.getDeclaredMethod("work",p);
+//            work.setAccessible(true);
+//            work.invoke(null,"sfdfsd");
+//
+//            //获取name属性
+//            Field field = r.getDeclaredField("name");
+//            field.setAccessible(true);
+//            field.get(dididi);
+//            field.set(dididi,"sfdfasdfasd");
+//            Method getName = r.getDeclaredMethod("getName");
+//            getName.setAccessible(true);
+//            System.out.println(getName.invoke(dididi));
+//        } catch (ClassNotFoundException e) {
+//            e.printStackTrace();
+//        } catch (NoSuchMethodException e) {
+//            e.printStackTrace();
+//        } catch (IllegalAccessException e) {
+//            e.printStackTrace();
+//        } catch (InstantiationException e) {
+//            e.printStackTrace();
+//        } catch (InvocationTargetException e) {
+//            e.printStackTrace();
+//        } catch (NoSuchFieldException e) {
+//            e.printStackTrace();
+//        }
 
     }
 }
