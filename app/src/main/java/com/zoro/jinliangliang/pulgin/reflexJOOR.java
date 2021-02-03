@@ -1,6 +1,5 @@
 package com.zoro.jinliangliang.pulgin;
 
-import org.joor.Reflect;
 import org.w3c.dom.Text;
 
 /**
@@ -30,12 +29,12 @@ public class reflexJOOR {
         String className = temp.getName();
         System.out.println(className);
 
-        Object o1 = Reflect.on(temp).create().get();
-        Object o2 = Reflect.on(temp).create("abc",1).get();
-
-        Testaaaaa test1 = Reflect.on(Testaaaaa.class).create("asdfsdf",10).get();
-        String  a = test1.getName();
-        System.out.println(a);
+//        Object o1 = Reflect.on(temp).create().get();
+//        Object o2 = Reflect.on(temp).create("abc",1).get();
+//
+//        Testaaaaa test1 = Reflect.on(Testaaaaa.class).create("asdfsdf",10).get();
+//        String  a = test1.getName();
+//        System.out.println(a);
 
     }
 }
