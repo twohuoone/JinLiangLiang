@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title>单键开关(WL)</title>
+    <link rel="stylesheet" type="text/css" href="../css/common.css"/>
+    <link rel="stylesheet" type="text/css" href="../iconfont/iconfont.css"/>
+</head>
+<body>
+<div class="content" id="app" v-cloak :class="{'not-online':!online}">
+    <not-online :visible="online"></not-online>
+    <div class="shelter"></div>
+    <div class="contentImg">
+        <img src="../img/oneSwitch.png"/>
+    </div>
+    <switch-btn :state="Switch" title="开关" @state-change="switchChange"></switch-btn>
+</div>
+<script src="../js/vue.min.js"></script>
+<script src="../js/vue-component/not-online.js"></script>
+<script src="../js/vue-component/switch-btn.js"></script>
+<script src="../js/public.js"></script>
+<script type="application/javascript">
+		var vm=new Vue({
+            el:'#app',
+            data:{
+                online:true,
+                Switch:0
+            },
+            methods:{
+                switchChange(val){
+                    //this.Switch=val;
+                    window.ZjeIot.deviceControl(JSON.stringify({
+                        cmdId:2,
+                        Switch:val
+                    }));
+                },
+                initData(val,type){
+                    var data=JSON.parse(val);
+                    var field=type===1?'snapshot':'field';
+                    if(data.online!=null){
+                        this.online=data.online;
+                    }
+                    if(data[field].Switch){
+                        this.Switch=getFieldValue(data[field].Switch);
+                    }
+                },
+            },
+            mounted(){
+                setTimeout(function () {
+                    vm.initData(window.ZjeIot.getInfoFromApp(),1);
+                },300)
+            }
+        })
+        function deviceStatusChange(even) {
+            vm.initData(even,2);
+        }
+</script>
+</body>
+</html>

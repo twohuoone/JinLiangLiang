@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script type="text/javascript"> 
+		window.onload = function(){
+			var oBtn = document.getElementById('btn');
+			var oLis = document.getElementsByTagName('li');
+			console.log(oLis);
+			var oUl = document.getElementById('ul');
+			var arrLis = [];
+			for(var i=0;i<oLis.length;i++){
+				arrLis[i] = oLis[i]; 
+				console.log(oLis[i]);
+			}
+			arrLis.sort(function(li1,li2){
+				return parseInt(li1.innerHTML)-parseInt(li2.innerHTML);
+			});
+			oBtn.onclick = function(){
+				for(var i=0;i<arrLis.length;i++){
+					oUl.appendChild(oLis[i]);
+					}
+			};
+		};
+	</script>
+</head>
+<body>
+<input id="btn" type="button" name="" value="排序">
+<ul id="ul">
+	<li>34</li>
+	<li>22</li>
+	<li>31</li>
+	<li>24</li>
+	<li>15</li>
+	<li>6</li>
+</ul>
+</body>
+</html>

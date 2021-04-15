@@ -1,3 +1,5 @@
+include ':rxJava'
+include ':app:rxJava'
 rootProject.name='JinLiangLiang'
 include ':app'
 include ':reflex'

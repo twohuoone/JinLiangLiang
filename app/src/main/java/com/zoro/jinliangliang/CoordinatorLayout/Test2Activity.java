@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import com.zoro.jinliangliang.R;
 
 import androidx.annotation.Nullable;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.ViewCompat;
 import butterknife.BindView;
 import butterknife.ButterKnife;
