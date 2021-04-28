@@ -5,24 +5,40 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 
+import com.alibaba.fastjson.JSONObject;
 import com.zoro.jinliangliang.R;
+import com.zoro.jinliangliang.Uitls.GetMacAddress;
+import com.zoro.jinliangliang.Uitls.LogUtils;
+import com.zoro.jinliangliang.rxjava.bean.ActivateInfo;
+import com.zoro.jinliangliang.rxjava.bean.BaseInfo;
 
 public class RxJavaActivity extends AppCompatActivity {
     private static final String TAG = "RxJavaActivity";
+    private Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rx_java);
+        mContext = this;
+        DisplayMetrics dm = getResources().getDisplayMetrics();
+        int screenWidth = dm.widthPixels;
+        int screenHeight = dm.heightPixels;
+        LogUtils.d("========screenWidth=="+screenWidth+"      screenHeight=="+screenHeight);
         test2();
     }
 
@@ -41,8 +57,8 @@ public class RxJavaActivity extends AppCompatActivity {
             }
         }).subscribe(new Consumer<String>() {
             @Override
-            public void accept(@NonNull String s) throws Exception {
-                Log.e(TAG, "accept : " + s +"\n" );
+            public void accept(String s) throws Exception {
+
             }
         });
     }
@@ -143,6 +159,15 @@ public class RxJavaActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void getData(){
+        JSONObject params = new JSONObject();
+        params.put("deviceCode", "GetMacAddress.getMacAddress()");
+//        HttpUtils.mService.isActivate(HttpUtils.getRequestBody(params))
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribeOn(Schedulers.io())
+//                .subscribeWith();
     }
 
 
