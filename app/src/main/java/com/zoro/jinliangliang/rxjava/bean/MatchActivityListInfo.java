@@ -10,17 +10,17 @@ import java.util.List;
  * description:
  */
 public class MatchActivityListInfo implements Serializable {
-    private List<com.hdl.smarttrack.bean.MatchActivityInfo> list = new ArrayList<>();
+    private List<MatchActivityInfo> list = new ArrayList<>();
     private String totalCount;
 
-    public List<com.hdl.smarttrack.bean.MatchActivityInfo> getList() {
+    public List<MatchActivityInfo> getList() {
         if (list == null) {
             return new ArrayList<>();
         }
         return list;
     }
 
-    public void setList(List<com.hdl.smarttrack.bean.MatchActivityInfo> list) {
+    public void setList(List<MatchActivityInfo> list) {
         this.list = list;
     }
 

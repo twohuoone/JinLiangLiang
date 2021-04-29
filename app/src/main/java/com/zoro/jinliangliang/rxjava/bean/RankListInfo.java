@@ -9,19 +9,19 @@ import java.util.List;
  * description:
  */
 public class RankListInfo {
-    private List<com.hdl.smarttrack.bean.RankInfo> list = new ArrayList<>();
+    private List<RankInfo> list = new ArrayList<>();
     private int pageNo;
     private int pageSize;
     private int totalCount;
 
-    public List<com.hdl.smarttrack.bean.RankInfo> getList() {
+    public List<RankInfo> getList() {
         if (list == null) {
             return new ArrayList<>();
         }
         return list;
     }
 
-    public void setList(List<com.hdl.smarttrack.bean.RankInfo> list) {
+    public void setList(List<RankInfo> list) {
         this.list = list;
     }
 

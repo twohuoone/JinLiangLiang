@@ -10,19 +10,25 @@ import java.io.Serializable;
  * @Date : 2019/6/9.
  * @Describe :
  */
-
 public class BaseInfo<T> implements Serializable {
-    private String code;
+
+    public static final int SUCCESS = 1;
+
+    private int code;
     private T data;
     private String message;
     private SuccessCallBack mSuccessCallBack;
 
+    public BaseInfo(int code, T data) {
+        this.code = code;
+        this.data = data;
+    }
 
-    public String getCode() {
+    public int getCode() {
         return code;
     }
 
-    public void setCode(String code) {
+    public void setCode(int code) {
         this.code = code;
     }
 

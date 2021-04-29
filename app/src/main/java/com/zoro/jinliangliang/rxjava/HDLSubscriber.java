@@ -18,7 +18,7 @@ import retrofit2.adapter.rxjava.HttpException;
  * @Describe :
  */
 
-public abstract class HDLSubscriber<T> implements Observer<T> {
+public abstract class HDLSubscriber<T> implements Observer<T>  {
 
     private Context mContext;
 
@@ -67,23 +67,27 @@ public abstract class HDLSubscriber<T> implements Observer<T> {
     }
 
     @Override
+    public void onSubscribe(@NonNull Disposable d) {
+
+    }
+
+    @Override
     public void onNext(final T t) {
-//        if(t instanceof BaseInfo){
-//            ((BaseInfo) t).validateCode(mContext, new BaseInfo.SuccessCallBack() {
-//                @Override
-//                public void successCallBack() {
-//                    successful(t);
-//                }
-//
-//                @Override
-//                public void errorCallBack() {
-//
-//
-//                }
-//            });
-//        }else{
+        if(t instanceof BaseInfo){
+            ((BaseInfo) t).validateCode(mContext, new BaseInfo.SuccessCallBack() {
+                @Override
+                public void successCallBack() {
+                    successful(t);
+                }
+
+                @Override
+                public void errorCallBack() {
+
+                }
+            });
+        }else{
             successful(t);
-//        }
+        }
     }
 
     //网络请求成功

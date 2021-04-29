@@ -5,7 +5,6 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
@@ -14,6 +13,7 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -21,10 +21,11 @@ import android.util.Log;
 
 import com.alibaba.fastjson.JSONObject;
 import com.zoro.jinliangliang.R;
-import com.zoro.jinliangliang.Uitls.GetMacAddress;
 import com.zoro.jinliangliang.Uitls.LogUtils;
+import com.zoro.jinliangliang.Uitls.RxUtils;
 import com.zoro.jinliangliang.rxjava.bean.ActivateInfo;
 import com.zoro.jinliangliang.rxjava.bean.BaseInfo;
+import com.zoro.jinliangliang.rxjava.http.HttpUtils;
 
 public class RxJavaActivity extends AppCompatActivity {
     private static final String TAG = "RxJavaActivity";
@@ -38,27 +39,24 @@ public class RxJavaActivity extends AppCompatActivity {
         DisplayMetrics dm = getResources().getDisplayMetrics();
         int screenWidth = dm.widthPixels;
         int screenHeight = dm.heightPixels;
-        LogUtils.d("========screenWidth=="+screenWidth+"      screenHeight=="+screenHeight);
-        test2();
+        test();
     }
 
     private void test() {
-        Observable.create(new ObservableOnSubscribe<Integer>() {
+        Observable.create(new ObservableOnSubscribe<BaseInfo<Integer>>() {
             @Override
-            public void subscribe(@NonNull ObservableEmitter<Integer> e) throws Exception {
-                e.onNext(1);
-                e.onNext(2);
-                e.onNext(3);
+            public void subscribe(@NonNull ObservableEmitter<BaseInfo<Integer>> e) throws Exception {
+                e.onNext(new BaseInfo<>(1,1));
             }
-        }).map(new Function<Integer, String>() {
+        }).compose(RxUtils.handleResult()).subscribe(new HDLSubscriber<Integer>(mContext) {
             @Override
-            public String apply(@NonNull Integer integer) throws Exception {
-                return "This is result " + integer;
+            public void successful(Integer integer) {
+                LogUtils.d("========successful");
             }
-        }).subscribe(new Consumer<String>() {
-            @Override
-            public void accept(String s) throws Exception {
 
+            @Override
+            public void error(int code, String error) {
+                LogUtils.d("========error");
             }
         });
     }
@@ -84,7 +82,7 @@ public class RxJavaActivity extends AppCompatActivity {
             @Override
             public void onSubscribe(@NonNull Disposable d) {
                 Log.e(TAG, "onSubscribe : " + d.isDisposed() + "\n");
-                mDisposable = d;
+//                mDisposable = d;
             }
 
             @Override
@@ -93,8 +91,8 @@ public class RxJavaActivity extends AppCompatActivity {
                 i++;
                 if (i == 2) {
                     // 在RxJava 2.x 中，新增的Disposable可以做到切断的操作，让Observer观察者不再接收上游事件
-                    mDisposable.dispose();
-                    Log.e(TAG, "onNext : isDisposable : " + mDisposable.isDisposed() + "\n");
+//                    mDisposable.dispose();
+//                    Log.e(TAG, "onNext : isDisposable : " + mDisposable.isDisposed() + "\n");
                 }
             }
 
@@ -111,15 +109,21 @@ public class RxJavaActivity extends AppCompatActivity {
     }
 
     private void test2() {
-        Observable.zip(getIntegerObservable(),getStringObservable(), new BiFunction<Integer,String, String>() {
+        Observable.zip(getIntegerObservable(), getStringObservable(), new BiFunction<Integer, String, String>() {
             @Override
-            public String apply( @NonNull Integer integer,@NonNull String s) throws Exception {
+            public String apply(@NonNull Integer integer, @NonNull String s) throws Exception {
                 return s + integer;
             }
-        }).subscribe(new Consumer<String>() {
+        }).observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io()).subscribeWith(new HDLSubscriber<String>(mContext) {
             @Override
-            public void accept(@NonNull String s) throws Exception {
-                Log.e(TAG, "zip : accept : " + s + "\n");
+            public void successful(String s) {
+
+            }
+
+            @Override
+            public void error(int code, String error) {
+
             }
         });
     }
@@ -161,13 +165,24 @@ public class RxJavaActivity extends AppCompatActivity {
         });
     }
 
-    private void getData(){
+    @SuppressLint("CheckResult")
+    private void getData() {
         JSONObject params = new JSONObject();
         params.put("deviceCode", "GetMacAddress.getMacAddress()");
-//        HttpUtils.mService.isActivate(HttpUtils.getRequestBody(params))
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribeOn(Schedulers.io())
-//                .subscribeWith();
+        HttpUtils.mService.isActivate(HttpUtils.getRequestBody(params))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribeWith(new HDLSubscriber<BaseInfo<ActivateInfo>>(mContext) {
+                    @Override
+                    public void successful(BaseInfo<ActivateInfo> activateInfoBaseInfo) {
+
+                    }
+
+                    @Override
+                    public void error(int code, String error) {
+
+                    }
+                });
     }
 
 

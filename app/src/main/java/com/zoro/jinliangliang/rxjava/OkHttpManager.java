@@ -84,11 +84,32 @@ public class OkHttpManager {
     static class HttpCacheInterceptor implements Interceptor {
         @Override
         public Response intercept(Chain chain) throws IOException {
+
+            /**
+             * 获取token
+             * 1.判断sp里面是否有token（如果没有通过模拟Response返回没有token的编码）
+             * 2.判断token是否过期
+             * 2.1.没有过期的话直接执行chain.proceed(request)
+             * 3.过期的话需要通过refreshToken进行token刷新
+             * 4.如果刷新失败直接退出到登录页面（如果失败通过模拟Response返回到登录页面的编码）
+             * 5.如果刷新成功直接进行chain.proceed(request)
+             */
             Request request = chain.request().newBuilder()
                     .addHeader("Content-Type", "application/json")
                     .addHeader("Accept", "application/json")
                     .build();
-
+            //            if (1 == 1) {
+//                String json = "{\"code\": 200, \"message\": \"success\"}";
+//                Response response = new Response.Builder()
+//                        .code(200)
+//                        .addHeader("Content-Type", "application/json")
+//                        .body(ResponseBody.create(MediaType.parse("application/json"), json))
+//                        .message(json)
+//                        .request(chain.request())
+//                        .protocol(Protocol.HTTP_2)
+//                        .build();
+//                return response;
+//            }
             //记录请求耗时
             long startNs = System.nanoTime();
             RequestBody requestBody = request.body();
@@ -102,7 +123,6 @@ public class OkHttpManager {
             long tookMs = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startNs);
             //获得返回的body，注意此处不要使用responseBody.string()获取返回数据，原因在于这个方法会消耗返回结果的数据(buffer)
             ResponseBody responseBody = response.body();
-
             //为了不消耗buffer，我们这里使用source先获得buffer对象，然后clone()后使用
             BufferedSource source = responseBody.source();
             source.request(Long.MAX_VALUE); // Buffer the entire body.
@@ -115,13 +135,11 @@ public class OkHttpManager {
             Log.d("RetrofitLog:", headers.toString());
             Buffer buffer1 = new Buffer();
             requestBody.writeTo(buffer1);
-
             Charset charset = UTF8;
             MediaType contentType = requestBody.contentType();
             if (contentType != null) {
                 charset = contentType.charset(UTF8);
             }
-
             Log.d("RetrofitLog:", "params:" + buffer1.readString(charset));
             Log.d("RetrofitLog:", "url:" + request.url());
             Log.d("RetrofitLog:", "headers:" + request.headers().toString());
