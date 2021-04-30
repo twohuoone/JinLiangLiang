@@ -98,7 +98,8 @@ public class OkHttpManager {
                     .addHeader("Content-Type", "application/json")
                     .addHeader("Accept", "application/json")
                     .build();
-            //            if (1 == 1) {
+//            if (1 == 1) {
+//            //返回token刷新失败的数据
 //                String json = "{\"code\": 200, \"message\": \"success\"}";
 //                Response response = new Response.Builder()
 //                        .code(200)

@@ -4,6 +4,7 @@ package com.zoro.jinliangliang.rxjava;
 
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
@@ -21,7 +22,7 @@ public class KernerlClient {
         Retrofit retrofit1 = new Retrofit.Builder()
                 .baseUrl("https://gateway.hdlcontrol.com/community-wisdom/")
                 .client(OkHttpManager.getInstance())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 

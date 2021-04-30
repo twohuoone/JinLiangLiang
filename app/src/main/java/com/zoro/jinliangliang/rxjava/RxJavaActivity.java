@@ -39,7 +39,7 @@ public class RxJavaActivity extends AppCompatActivity {
         DisplayMetrics dm = getResources().getDisplayMetrics();
         int screenWidth = dm.widthPixels;
         int screenHeight = dm.heightPixels;
-        test();
+        getData();
     }
 
     private void test() {
@@ -170,11 +170,10 @@ public class RxJavaActivity extends AppCompatActivity {
         JSONObject params = new JSONObject();
         params.put("deviceCode", "GetMacAddress.getMacAddress()");
         HttpUtils.mService.isActivate(HttpUtils.getRequestBody(params))
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribeWith(new HDLSubscriber<BaseInfo<ActivateInfo>>(mContext) {
+                .compose(RxUtils.rxSchedulerHelper())
+                .subscribeWith(new HDLSubscriber<ActivateInfo>(mContext) {
                     @Override
-                    public void successful(BaseInfo<ActivateInfo> activateInfoBaseInfo) {
+                    public void successful(ActivateInfo activateInfo) {
 
                     }
 
