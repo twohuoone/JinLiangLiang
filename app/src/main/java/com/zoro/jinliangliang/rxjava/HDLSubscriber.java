@@ -1,9 +1,13 @@
 package com.zoro.jinliangliang.rxjava;
 
 import android.content.Context;
+
 import com.zoro.jinliangliang.Uitls.LogUtils;
+import com.zoro.jinliangliang.Uitls.ToastUtils;
 import com.zoro.jinliangliang.rxjava.bean.BaseInfo;
+
 import java.net.SocketTimeoutException;
+
 import javax.net.ssl.SSLHandshakeException;
 
 import io.reactivex.Observer;
@@ -18,7 +22,7 @@ import retrofit2.adapter.rxjava.HttpException;
  * @Describe :
  */
 
-public abstract class HDLSubscriber<T> implements Observer<T>  {
+public abstract class HDLSubscriber<T> implements Observer<T> {
 
     private Context mContext;
 
@@ -32,38 +36,20 @@ public abstract class HDLSubscriber<T> implements Observer<T>  {
 
     @Override
     public void onError(Throwable e) {
-        dealError(e, mContext);
-        if (e instanceof HttpException) {
-            //获取对应statusCode和Message
-            HttpException exception = (HttpException) e;
-            String message = exception.response().message();
-            int code = exception.response().code();
-            error(code, e.getMessage());
-        } else if (e instanceof SSLHandshakeException) {
-            //接下来就是各种异常类型判断...
-            error(18888, e.getMessage());
-        } else {
-            error(404, e.getMessage());
-        }
-    }
-
-    /**
-     * 异常打印
-     *
-     * @param e
-     * @param context
-     */
-    public static void dealError(Throwable e, Context context) {
         if (e instanceof SocketTimeoutException) {
-//            ToastUtils.showLong("连接超时");
+            ToastUtils.showLong("连接超时");
         } else {
-//            ToastUtils.showLong("网络异常");
+            ToastUtils.showLong("网络异常");
             if (e != null) {
                 if (e.getMessage() != null) {
                     LogUtils.i("Error=" + e.getMessage().toString());
                 }
             }
         }
+        retrofit2.HttpException exception = (retrofit2.HttpException) e;
+        String message = exception.response().message();
+        int code = exception.response().code();
+        errorCallBack(code, message);
     }
 
     @Override
@@ -73,27 +59,29 @@ public abstract class HDLSubscriber<T> implements Observer<T>  {
 
     @Override
     public void onNext(final T t) {
-        if(t instanceof BaseInfo){
-            ((BaseInfo) t).validateCode(mContext, new BaseInfo.SuccessCallBack() {
+        if (t instanceof BaseInfo) {
+            ((BaseInfo) t).validateCode(mContext, new BaseInfo.SuccessImpl() {
                 @Override
-                public void successCallBack() {
-                    successful(t);
+                public void success() {
+                    successCallBack(t);
                 }
 
                 @Override
-                public void errorCallBack() {
-
+                public void error() {
+                    errorCallBack(9999,"业务错误");
                 }
+
             });
-        }else{
-            successful(t);
+        } else {
+            successCallBack(t);
         }
     }
 
     //网络请求成功
-    public abstract void successful(T t);
+    public abstract void successCallBack(T t);
 
-    //网络请求失败，同时处理请求失败的外部ui更改
-    public abstract void error(int code, String error);
+
+    //网络请求失败或者数据使用异常
+    public abstract void errorCallBack(int code, String error);
 
 }

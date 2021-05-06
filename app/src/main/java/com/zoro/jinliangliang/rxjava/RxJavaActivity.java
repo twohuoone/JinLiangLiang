@@ -50,13 +50,13 @@ public class RxJavaActivity extends AppCompatActivity {
             }
         }).compose(RxUtils.handleResult()).subscribe(new HDLSubscriber<Integer>(mContext) {
             @Override
-            public void successful(Integer integer) {
-                LogUtils.d("========successful");
+            public void successCallBack(Integer integer) {
+
             }
 
             @Override
-            public void error(int code, String error) {
-                LogUtils.d("========error");
+            public void errorCallBack(int code, String error) {
+
             }
         });
     }
@@ -117,14 +117,15 @@ public class RxJavaActivity extends AppCompatActivity {
         }).observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io()).subscribeWith(new HDLSubscriber<String>(mContext) {
             @Override
-            public void successful(String s) {
+            public void successCallBack(String s) {
 
             }
 
             @Override
-            public void error(int code, String error) {
+            public void errorCallBack(int code, String error) {
 
             }
+
         });
     }
 
@@ -172,13 +173,14 @@ public class RxJavaActivity extends AppCompatActivity {
         HttpUtils.mService.isActivate(HttpUtils.getRequestBody(params))
                 .compose(RxUtils.rxSchedulerHelper())
                 .subscribeWith(new HDLSubscriber<ActivateInfo>(mContext) {
+
                     @Override
-                    public void successful(ActivateInfo activateInfo) {
+                    public void successCallBack(ActivateInfo activateInfo) {
 
                     }
 
                     @Override
-                    public void error(int code, String error) {
+                    public void errorCallBack(int code, String error) {
 
                     }
                 });
