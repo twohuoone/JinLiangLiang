@@ -16,13 +16,18 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.zoro.jinliangliang.Uitls.LogUtils;
+
 import org.json.JSONObject;
+
+import java.io.File;
 
 public class MainActivity extends Activity {
     Context mContext;
@@ -49,13 +54,35 @@ public class MainActivity extends Activity {
         mHandler = new Handler();
         setContentView(R.layout.activity_main);
 
+//        String wgtPath = getExternalCacheDir().getPath()+"/__UNI__04E3A11.wgt";
+//
+//       File zje_Dir = new File(Environment.getExternalStorageDirectory(), "Android/data/com.zje.iot");
+//        if (!zje_Dir.exists()) {
+//            boolean mkdirs = zje_Dir.mkdirs();
+//        }
+
+        File[] files;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            files = getExternalFilesDirs(Environment.MEDIA_MOUNTED);
+            for(File file:files){
+                Log.e("wgtPath=====", String.valueOf(file));
+            }
+        }
+        LogUtils.d("wgtPath====="+getExternalFilesDir("").getAbsolutePath());
+        LogUtils.d("wgtPath====="+Environment.getExternalStorageDirectory().getAbsolutePath());
+        LogUtils.d("wgtPath====="+Environment.getDataDirectory());
+        LogUtils.d("wgtPath====="+getFilesDir().getAbsolutePath());
+        LogUtils.d("wgtPath====="+getCacheDir().getAbsolutePath());
+        LogUtils.d("wgtPath====="+getDir("myFile", MODE_PRIVATE).getAbsolutePath());
+        LogUtils.d("wgtPath====="+getExternalCacheDir().getPath());
+
         Button button1 = findViewById(R.id.button1);
 
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 try {
-                    DCUniMPSDK.getInstance().startApp(mContext, "__UNI__3397809","pages/homePage/homePage");
+                    DCUniMPSDK.getInstance().startApp(mContext, "__UNI__3397809");
 //                    handler.sendEmptyMessageDelayed(1,5000);
                 } catch (Exception e) {
                     e.printStackTrace();
