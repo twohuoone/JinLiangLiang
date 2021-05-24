@@ -4,6 +4,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import io.dcloud.common.DHInterface.ICallBack;
 import io.dcloud.feature.sdk.DCUniMPJSCallback;
 import io.dcloud.feature.sdk.DCUniMPSDK;
 import io.reactivex.annotations.NonNull;
@@ -12,6 +13,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -22,8 +24,10 @@ import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.zoro.jinliangliang.Uitls.LogUtils;
+import com.zoro.jinliangliang.cardlayout.CardActivity;
 
 import org.json.JSONObject;
 
@@ -61,26 +65,48 @@ public class MainActivity extends Activity {
 //            boolean mkdirs = zje_Dir.mkdirs();
 //        }
 
-        File[] files;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            files = getExternalFilesDirs(Environment.MEDIA_MOUNTED);
-            for(File file:files){
-                Log.e("wgtPath=====", String.valueOf(file));
-            }
-        }
-        LogUtils.d("wgtPath====="+getExternalFilesDir("").getAbsolutePath());
-        LogUtils.d("wgtPath====="+Environment.getExternalStorageDirectory().getAbsolutePath());
-        LogUtils.d("wgtPath====="+Environment.getDataDirectory());
-        LogUtils.d("wgtPath====="+getFilesDir().getAbsolutePath());
-        LogUtils.d("wgtPath====="+getCacheDir().getAbsolutePath());
-        LogUtils.d("wgtPath====="+getDir("myFile", MODE_PRIVATE).getAbsolutePath());
-        LogUtils.d("wgtPath====="+getExternalCacheDir().getPath());
+//        File[] files;
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+//            files = getExternalFilesDirs(Environment.MEDIA_MOUNTED);
+//            for(File file:files){
+//                Log.e("wgtPath=====", String.valueOf(file));
+//            }
+//        }
+//        LogUtils.d("wgtPath====="+getExternalFilesDir("").getAbsolutePath());
+//        LogUtils.d("wgtPath====="+Environment.getExternalStorageDirectory().getAbsolutePath());
+//        LogUtils.d("wgtPath====="+Environment.getDataDirectory());
+//        LogUtils.d("wgtPath====="+getFilesDir().getAbsolutePath());
+//        LogUtils.d("wgtPath====="+getCacheDir().getAbsolutePath());
+//        LogUtils.d("wgtPath====="+getDir("myFile", MODE_PRIVATE).getAbsolutePath());
+//        LogUtils.d("wgtPath====="+getExternalCacheDir().getPath());
 
         Button button1 = findViewById(R.id.button1);
 
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+//                try {
+//                    DCUniMPSDK.getInstance().startApp(mContext, "__UNI__3397809");
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//                String wgtPath = getExternalFilesDir("").getAbsolutePath()+"/__UNI__3397809.wgt";
+//                DCUniMPSDK.getInstance().releaseWgtToRunPathFromePath("__UNI__3397809", wgtPath, new ICallBack() {
+//                    @Override
+//                    public Object onCallBack(int code, Object pArgs) {
+//                        LogUtils.d("wgtPath=====发送到发送到发送");
+//                        if(code ==1) {//释放wgt完成
+//                            try {
+//                                DCUniMPSDK.getInstance().startApp(mContext, "__UNI__3397809");
+//                            } catch (Exception e) {
+//                                e.printStackTrace();
+//                            }
+//                        } else{//释放wgt失败
+//                            Toast.makeText(mContext, "资源释放失败", Toast.LENGTH_SHORT).show();
+//                        }
+//                        return null;
+//                    }
+//                });
                 try {
                     DCUniMPSDK.getInstance().startApp(mContext, "__UNI__3397809");
 //                    handler.sendEmptyMessageDelayed(1,5000);
@@ -110,7 +136,7 @@ public class MainActivity extends Activity {
             public void onClick(View view) {
                 try {
                     //"pages/tabBar/extUI/extUI" "pages/component/scroll-view/scroll-view"
-                    DCUniMPSDK.getInstance().startApp(mContext, "__UNI__04E3A11", "pages/tabBar/extUI/extUI?aaa=123&bbb=456");
+                    DCUniMPSDK.getInstance().startApp(mContext, "__UNI__3397809", "pages/testManage/index");
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -227,6 +253,8 @@ public class MainActivity extends Activity {
             @Override
             public void onUniMPEventReceive(String event, Object data, DCUniMPJSCallback callback) {
                 Log.i("cs", "onUniMPEventReceive    event=" + event+"  ----"+data.toString());
+                Intent intent = new Intent(MainActivity.this,CardActivity.class);
+                startActivity(intent);
                 //回传数据给小程序
 //                callback.invoke("收到消息");
 //                try {

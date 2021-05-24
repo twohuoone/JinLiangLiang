@@ -53,7 +53,7 @@ public class BaseInfo<T> implements Serializable {
 
     public void validateCode(final Context context, final SuccessImpl successCallBack) {
         mSuccessCallBack = successCallBack;
-        if ("0".equals(code)) {
+        if (0==code) {
             mSuccessCallBack.success();
         } else if ("10004".equals(code) || "10007".equals(code)) {
             //清空sp数据，跳转到登录页面

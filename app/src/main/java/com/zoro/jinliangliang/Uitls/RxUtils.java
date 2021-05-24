@@ -41,16 +41,15 @@ public class RxUtils {
      * @param <T> 指定的泛型类型
      * @return ObservableTransformer
      */
-    public static <T> ObservableTransformer<BaseInfo<T>, T> rxSchedulerHelper() {
+    public static <T> ObservableTransformer rxSchedulerHelper() {
         return observable -> observable.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .compose(handleResult());
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     public static <T> ObservableTransformer<BaseInfo<T>, T> handleResult() {
         return httpResponseObservable ->
                 httpResponseObservable.flatMap((Function<BaseInfo<T>, Observable<T>>) baseResponse -> {
-                    if (baseResponse.getCode() == 1) {
+                    if (baseResponse.getCode() == 0) {
                         return createData(baseResponse.getData());
                     } else if (2 == baseResponse.getCode() || 3 == baseResponse.getCode()) {
                         return Observable.error(new LoginException(baseResponse.getMessage()));

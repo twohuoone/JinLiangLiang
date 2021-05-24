@@ -1,6 +1,7 @@
 package com.zoro.jinliangliang.rxjava;
 
 import androidx.appcompat.app.AppCompatActivity;
+import io.dcloud.common.adapter.util.Logger;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -12,6 +13,7 @@ import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
+import rx.plugins.RxJavaPlugins;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -46,7 +48,7 @@ public class RxJavaActivity extends AppCompatActivity {
         Observable.create(new ObservableOnSubscribe<BaseInfo<Integer>>() {
             @Override
             public void subscribe(@NonNull ObservableEmitter<BaseInfo<Integer>> e) throws Exception {
-                e.onNext(new BaseInfo<>(1,1));
+                e.onNext(new BaseInfo<>(1, 1));
             }
         }).compose(RxUtils.handleResult()).subscribe(new HDLSubscriber<Integer>(mContext) {
             @Override
@@ -108,6 +110,7 @@ public class RxJavaActivity extends AppCompatActivity {
         });
     }
 
+    @SuppressLint("CheckResult")
     private void test2() {
         Observable.zip(getIntegerObservable(), getStringObservable(), new BiFunction<Integer, String, String>() {
             @Override
@@ -115,7 +118,7 @@ public class RxJavaActivity extends AppCompatActivity {
                 return s + integer;
             }
         }).observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io()).subscribeWith(new HDLSubscriber<String>(mContext) {
+                .subscribeOn(Schedulers.io()).subscribeWith(new HDLSubscriber<String>() {
             @Override
             public void successCallBack(String s) {
 
@@ -125,8 +128,7 @@ public class RxJavaActivity extends AppCompatActivity {
             public void errorCallBack(int code, String error) {
 
             }
-
-        });
+        };
     }
 
 
@@ -172,11 +174,10 @@ public class RxJavaActivity extends AppCompatActivity {
         params.put("deviceCode", "GetMacAddress.getMacAddress()");
         HttpUtils.mService.isActivate(HttpUtils.getRequestBody(params))
                 .compose(RxUtils.rxSchedulerHelper())
-                .subscribeWith(new HDLSubscriber<ActivateInfo>(mContext) {
-
+                .subscribe(new HDLSubscriber<BaseInfo<ActivateInfo>>(mContext) {
                     @Override
-                    public void successCallBack(ActivateInfo activateInfo) {
-
+                    public void successCallBack(BaseInfo<ActivateInfo> activateInfoBaseInfo) {
+                        int a = 1 / 0;
                     }
 
                     @Override
@@ -184,6 +185,25 @@ public class RxJavaActivity extends AppCompatActivity {
 
                     }
                 });
+    }
+
+    @SuppressLint("CheckResult")
+    private void getData(String a) {
+        JSONObject params = new JSONObject();
+        params.put("deviceCode", "GetMacAddress.getMacAddress()");
+        HttpUtils.mService.isActivate(HttpUtils.getRequestBody(params))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Consumer() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        int a = 1 / 0;
+                    }
+                });
+
+        HttpUtils.mService.realNum(HttpUtils.getRequestBody(params))
+                .compose(RxUtils.rxSchedulerHelper())
+                .subscribeWith(new H)
     }
 
 

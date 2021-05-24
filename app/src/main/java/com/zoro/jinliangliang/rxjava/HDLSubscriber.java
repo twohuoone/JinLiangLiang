@@ -63,7 +63,12 @@ public abstract class HDLSubscriber<T> implements Observer<T> {
             ((BaseInfo) t).validateCode(mContext, new BaseInfo.SuccessImpl() {
                 @Override
                 public void success() {
-                    successCallBack(t);
+                    try{
+                        successCallBack(t);
+                    }catch (Exception e){
+                        ToastUtils.showLong("fdsfasdfasfasdf");
+                        LogUtils.d("fdsfasdfasfasdf");
+                    }
                 }
 
                 @Override

@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.taobao.weex.WXSDKEngine;
 import com.taobao.weex.common.WXException;
+import com.zoro.jinliangliang.Uitls.ToastUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,7 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        ToastUtils.init(this);
 //        try {
 //            WXSDKEngine.registerModule("TestModule", TestModule.class);
 //            WXSDKEngine.registerComponent("myText", TestText.class);
